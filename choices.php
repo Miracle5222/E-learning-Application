@@ -250,6 +250,7 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Choices
                         </button>
+                        <a href="questions.php?quiz_Id=<?= $_GET['quiz_Id'] ?>" class="btn btn-success  text-white">Back to Questions</a>
 
                     </div>
                 </div>
@@ -283,7 +284,7 @@ if (!isset($_SESSION['admin_id'])) {
                             <tbody>
                                 <?php
 
-                                $sql = "SELECT * from tblchoices";
+                                $sql = "SELECT * from tblchoices where question_Id = '$_GET[question_Id]'";
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -345,9 +346,9 @@ if (!isset($_SESSION['admin_id'])) {
                                             <div class="mb-3">
                                                 <label for="date" class="form-label">IsCorrect</label>
                                                 <select class="form-select" aria-label="Default select example" required name="isCorrect">
-                                                    <option selected>Select Type</option>
+
                                                     <option value="True">True</option>
-                                                    <option value="False">False</option>
+                                                    <option value="False" selected>False</option>
                                                 </select>
 
                                             </div>

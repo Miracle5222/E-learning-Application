@@ -249,6 +249,7 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Questions
                         </button>
+                        <a href="quiz.php" class="btn btn-success  text-white">Back</a>
 
                     </div>
                 </div>
@@ -283,7 +284,13 @@ if (!isset($_SESSION['admin_id'])) {
                             <tbody>
                                 <?php
 
-                                $sql = "SELECT * from tblquestions";
+
+                                if (isset($_GET['quiz_Id'])) {
+                                    $sql = "SELECT * from tblquestions where quiz_Id = '$_GET[quiz_Id]'";
+                                } else {
+                                    $sql = "SELECT * from tblquestions";
+                                }
+
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -302,8 +309,8 @@ if (!isset($_SESSION['admin_id'])) {
                                             <td>
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
                                                     <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-                                                    <a href="choices.php?question_Id=<?= $row['question_Id'] ?>" class="mx-2 btn btn-primary">Add Choices</a>
+                                                    <a onclick="confirm('are you sure you want to delete this Question?')" href="./process/deletequestions.php?question_Id=<?= $row['question_Id'] ?>&quiz_Id=<?= $_GET['quiz_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+                                                    <a href="choices.php?question_Id=<?= $row['question_Id'] ?>&quiz_Id=<?= $_GET['quiz_Id'] ?>" class="mx-2 btn btn-primary">Add Choices</a>
                                                 </div>
                                             </td>
                                         </tr>

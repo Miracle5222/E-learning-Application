@@ -200,35 +200,53 @@ $_SESSION['modules_Id'] = $array1;
                             $module_Id = "$_POST[module_Id]";
 
                             $date = $_POST['date'];
+                            $inserted = false;
+                            $addquerry = "insert into tblquiz(modules_Id,date) values ('$module_Id','$date')";
+                            $iquery = mysqli_query($conn, $addquerry);
 
-                            $selectQuiz = "select * from tblquiz where modules_Id = '$module_Id'";
+                            if ($iquery) {
+                                $selectQuiz = "select * from tblquiz where modules_Id = '$module_Id'";
+                                $resselectQuiz = $conn->query($selectQuiz);
 
-                            $res = $conn->query($selectQuiz);
-                            if ($res->num_rows > 0) { ?>
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Quiz already exist!</strong>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                                <?php } else {
+                                $addAllStudent = "select * from tblstudent";
 
-                                $addquerry = "insert into tblquiz(modules_Id,date) values ('$module_Id','$date')";
-                                $iquery = mysqli_query($conn, $addquerry);
+                                $resStudent = $conn->query($addAllStudent);
 
-                                if ($iquery) { ?>
+                                if ($resselectQuiz->num_rows > 0) {
+                                    while ($rowQuiz = $resselectQuiz->fetch_assoc()) {
+
+                                        if ($resStudent->num_rows > 0) {
+                                            while ($rowRes = $resStudent->fetch_assoc()) {
+                                                $insertQuiz = "insert into tblquizzes(quiz_Id,student_Id,modules_Id)value('$rowQuiz[quiz_Id]','$rowRes[student_Id]','$rowQuiz[modules_Id]')";
+                                                if ($conn->query($insertQuiz) === TRUE) {
+
+                                                    $inserted = true; ?>
+
+
+                                    <?php }
+                                            }
+                                        }
+                                    }
+                                }
+                                if ($inserted) { ?>
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <strong>Success!</strong> Quiz added successfully.
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-
                                 <?php
+                                }
 
-                                } else { ?>
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <strong> Failed to add Quiz</strong>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
+                                ?>
+
+
+                            <?php
+
+                            } else { ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong> Failed to add Quiz</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
                         <?php }
-                            }
                         }
                         ?>
 
@@ -281,12 +299,34 @@ $_SESSION['modules_Id'] = $array1;
                     </div>
                     <div class="col-md-8">
 
+                        <?php
+                        if (isset($_GET['quiz_Id'])) {
+                            $sql = "delete from tblquiz where  quiz_Id = '$_GET[quiz_Id]'";
+                            if ($conn->query($sql) === TRUE) { ?>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    Quiz Deleted.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+
+                            <?php
+
+                            } else { ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong> Failed to delete Quiz</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                        <?php }
+                        }
+
+
+                        ?>
+
                         <div class="card">
                             <table class="table table-stripe " style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Quiz ID</th>
-                                        <th>Module ID</th>
+                                        <th>Module Name</th>
                                         <th>date</th>
 
                                         <th>Edit</th>
@@ -295,7 +335,7 @@ $_SESSION['modules_Id'] = $array1;
                                 <tbody>
                                     <?php
 
-                                    $sql = "SELECT * from tblquiz";
+                                    $sql = "SELECT tblquiz.`quiz_Id`, tblquiz.`date`, tblmodules.`module_name` FROM tblquiz INNER JOIN tblmodules ON tblmodules.`modules_Id` = tblquiz.`modules_Id`";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
@@ -307,14 +347,14 @@ $_SESSION['modules_Id'] = $array1;
 
                                                 <td><?= $row['quiz_Id'] ?></td>
 
-                                                <td><?= $row['modules_Id'] ?></td>
+                                                <td><?= $row['module_name'] ?></td>
                                                 <td><?= $row['date'] ?></td>
 
 
                                                 <td class="text-center">
                                                     <div class="d-flex justify-content-start align-items-center flex-row ">
                                                         <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                        <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+                                                        <a onclick="confirm('are you sure you want to delete this Quiz?')" href="./addQuiz.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
                                                         <a href="questions.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2 btn btn-primary">View</a>
                                                     </div>

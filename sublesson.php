@@ -292,7 +292,15 @@ if (!isset($_SESSION['admin_id'])) {
                             <tbody>
                                 <?php
 
-                                $sql = "SELECT * from tblsublessons where lesson_Id = '$_GET[lesson_Id]'";
+
+
+                                if (isset($_GET['lesson_Id'])) {
+
+                                    $sql = "SELECT * from tblsublessons where lesson_Id = '$_GET[lesson_Id]'";
+                                } else {
+
+                                    $sql = "SELECT * from tblsublessons ";
+                                }
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -303,8 +311,8 @@ if (!isset($_SESSION['admin_id'])) {
                                         <tr>
 
                                             <td><?= $row['sublesson_Id'] ?></td>
-                                            <td><?= $row['header'] ?></td>
-                                            <td><?= $row['paragraph'] ?></td>
+                                            <td class="text-truncate"><?= $row['header'] ?></td>
+                                            <td class="text-truncate"><?= $row['paragraph'] ?></td>
                                             <td><?= $row['video'] ?></td>
                                             <td><?= $row['images'] ?></td>
 

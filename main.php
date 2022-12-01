@@ -178,19 +178,62 @@ if (!isset($_SESSION['admin_id'])) {
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Popularity</h2>
-                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Average Ratings</h2>
-                                <canvas id="myCharts" style="width:100%;max-width:600px"></canvas>
-                        </div>
-                    </div>
+                    <?php
+                    $modules = " select count(modules_Id) as totalModules from tblmodules";
+                    $resultModules = $conn->query($modules);
+                    $rowModules = $resultModules->fetch_assoc();
+                    if ($resultModules) {
+                        $_SESSION['totalModules'] = $rowModules['totalModules'];
+                    } else {
+                        $_SESSION['totalModules'] =  0;
+                    }
+                    $modules = " select count(lesson_Id) as totalLessons from tbllessons";
+                    $resultModules = $conn->query($modules);
+                    $rowModules = $resultModules->fetch_assoc();
+                    if ($resultModules) {
+                        $_SESSION['totalLessons'] = $rowModules['totalLessons'];
+                    } else {
+                        $_SESSION['totalLessons'] =  0;
+                    }
 
+                    $lang = " select count(programming_Id) as totalLanguage from programminglang";
+
+                    $resultlang = $conn->query($lang);
+                    $rowLang = $resultlang->fetch_assoc();
+                    if ($resultlang) {
+                        $_SESSION['totalLanguage'] = $rowLang['totalLanguage'];
+                    } else {
+                        $_SESSION['totalLanguage'] =  0;
+                    }
+
+                    ?>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <h3 class="text-center py-4">Total Modules</h2>
+                                <div style="height: 100px; width:100%; background-color:darkslategrey; border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
+                                    <h2 class="text-white"><?= $_SESSION['totalModules'] ?></h2>
+                                </div>
+                                <!-- <canvas id="myChart" style="width:100%;max-width:600px"></canvas> -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <h3 class="text-center py-4">Total Lessons</h2>
+                                <div style="height: 100px; width:100%; background-color:darkcyan;  border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
+                                    <h2 class="text-white"><?= $_SESSION['totalLessons'] ?></h2>
+                                </div>
+                                <!-- <canvas id="myCharts" style="width:100%;max-width:600px"></canvas> -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <h3 class="text-center py-4">Total Language</h2>
+                                <div style="height: 100px; width:100%; background-color:darkcyan;  border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
+                                    <h2 class="text-white"><?= $_SESSION['totalLanguage'] ?></h2>
+                                </div>
+                                <!-- <canvas id="myCharts" style="width:100%;max-width:600px"></canvas> -->
+                        </div>
+                    </div>
 
 
                 </div>
@@ -292,7 +335,7 @@ if (!isset($_SESSION['admin_id'])) {
                                                     <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
                                                     <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
-                                                    <a href="modules.php" class="mx-2 btn btn-primary">View</a>
+                                                    <a href="modules.php?programming_Id=<?= $row['programming_Id'] ?>" class="mx-2 btn btn-primary">View</a>
                                                 </div>
                                             </td>
                                         </tr>

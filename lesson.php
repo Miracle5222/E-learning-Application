@@ -233,7 +233,14 @@ if (!isset($_SESSION['admin_id'])) {
                             <tbody>
                                 <?php
 
-                                $sql = "SELECT * from tbllessons";
+
+
+
+                                if (isset($_GET['modules_Id'])) {
+                                    $sql = "SELECT * from tbllessons where modules_Id = '$_GET[modules_Id]'";
+                                } else {
+                                    $sql = "SELECT * from tbllessons";
+                                }
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {

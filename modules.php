@@ -232,7 +232,13 @@ if (!isset($_SESSION['admin_id'])) {
                             <tbody>
                                 <?php
 
-                                $sql = "SELECT tblmodules.`modules_Id`, tblmodules.`module_name`, tblmodules.`status`, programminglang.`name` FROM tblmodules INNER JOIN programminglang ON programminglang.`programming_Id` = tblmodules.`programming_Id`                                ";
+                                if (isset($_GET['programming_Id'])) {
+                       
+                                    $sql = "SELECT tblmodules.`modules_Id`, tblmodules.`module_name`, tblmodules.`status`, programminglang.`name` FROM tblmodules INNER JOIN programminglang ON programminglang.`programming_Id` = tblmodules.`programming_Id`  where tblmodules.`programming_Id` = '$_GET[programming_Id]'  ";
+                                } else {
+                                    $sql = "SELECT tblmodules.`modules_Id`, tblmodules.`module_name`, tblmodules.`status`, programminglang.`name` FROM tblmodules INNER JOIN programminglang ON programminglang.`programming_Id` = tblmodules.`programming_Id`  ";
+                                }
+
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -252,7 +258,7 @@ if (!isset($_SESSION['admin_id'])) {
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
                                                     <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
                                                     <a onclick="confirm('are you sure you want to delete this module?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-                                                    <a href="lesson.php" class="mx-2 btn btn-primary">View Lessons</a>
+                                                    <a href="lesson.php?modules_Id=<?= $row['modules_Id'] ?>" class="mx-2 btn btn-primary">View Lessons</a>
                                                 </div>
                                             </td>
                                         </tr>

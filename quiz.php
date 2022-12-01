@@ -233,7 +233,7 @@ if (!isset($_SESSION['admin_id'])) {
                             <tbody>
                                 <?php
 
-                                $sql = "SELECT * from tblquiz";
+                                $sql = "SELECT  tblquiz.quiz_Id,tblmodules.module_name, tblquiz.date, tblquiz.modules_Id from tblquiz inner join tblmodules on tblmodules.modules_Id = tblquiz.modules_Id";
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -243,7 +243,7 @@ if (!isset($_SESSION['admin_id'])) {
                                 ?>
                                         <tr>
                                             <td><?= $row['quiz_Id'] ?></td>
-                                            <td><?= $row['modules_Id'] ?></td>
+                                            <td><?= $row['module_name'] ?></td>
                                             <td><?= $row['date'] ?></td>
 
 
