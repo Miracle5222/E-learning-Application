@@ -15,9 +15,12 @@ $arr2 = array();
 
 $quiz_id = $obj['quiz_id'];
 $student_id = $obj['student_id'];
+$module_id = $obj['module_id'];
 // $sql = "SELECT result.`quiz_id`, result.`student_id`, result.`score`, result.`status` FROM result INNER JOIN quiz_tbl ON quiz_tbl.`quiz_id` = result.`quiz_id` WHERE quiz_tbl.`module_id` = '$module_id'";
 
-$sql = "SELECT tblresult.`quiz_Id`,tblresult.`score`,tblresult.`endedAt` , tblresult.`remarks` , tblresult.student_Id FROM tblresult INNER JOIN tblquiz ON tblquiz.`quiz_Id` = tblresult.`quiz_Id` WHERE tblquiz.`quiz_Id` = '$quiz_id' AND tblresult.student_Id = '$student_id' ORDER BY tblresult.endedAt ASC";
+$sql = "SELECT tblresult.`quiz_Id`,tblresult.`score`,tblresult.`endedAt` , tblresult.`remarks` , tblresult.student_Id 
+FROM tblresult INNER JOIN tblquiz ON tblquiz.`quiz_Id` = tblresult.`quiz_Id` 
+WHERE tblquiz.`modules_Id` = '$module_id' AND tblresult.student_Id = '$student_id' ORDER BY tblresult.endedAt ASC";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

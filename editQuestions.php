@@ -35,17 +35,30 @@ if (!isset($_SESSION['admin_id'])) {
 
     <!-- <script src="  https://code.jquery.com/jquery-3.5.1.js"></script> -->
 
+    <style>
+        .without_ampm::-webkit-datetime-edit-ampm-field {
+            display: none;
+        }
 
+        input[type=time]::-webkit-clear-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -o-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            margin: -10px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="preloader">
+    <!-- <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
             <div class="lds-pos"></div>
         </div>
-    </div>
+    </div> -->
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
@@ -170,8 +183,7 @@ if (!isset($_SESSION['admin_id'])) {
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-5">
-                        <h4 class="page-title">Dashboard</h4>
-
+                        <h4 class="page-title">Questions</h4>
                     </div>
                 </div>
             </div>
@@ -196,233 +208,134 @@ if (!isset($_SESSION['admin_id'])) {
 
                 </div> -->
 
-                <div class="row ">
-                    <div class="col-md-5">
+                <div class="row">
+                    <?php
+                    if (isset($_POST['editQuestions'])) {
+                        $description = $_POST['description'];
+                        $time = $_POST['time'];
+                        $level = $_POST['level'];
+                        $quiz_Id = $_POST['quiz_Id'];
+                        $question_type = $_POST['question_type'];
 
+
+                        $addquerry = "update tblquestions set description ='$description' ,time = '$time' ,level ='$level',quiz_Id = '$quiz_Id', question_type = '$question_type' where question_Id = '$_GET[question_Id]'";
+                        $iquery = mysqli_query($conn, $addquerry);
+
+                        if ($iquery) { ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Success!</strong> Question updated successfully.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+
+                        <?php
+
+                        } else { ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong> Failed to update Questions</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                    <?php }
+                    }
+
+
+
+
+
+
+                    ?>
+                </div>
+                <div class="row ">
+                    <div class="col-md-5 my-4">
+
+                        <a href="questions.php" class="btn btn-success  text-white">Back</a>
 
                     </div>
                 </div>
                 <div class="container ">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <?php
+                                    if (isset($_GET['question_Id'])) {
 
-                            <!-- <?php include  "./process/deleteRecipe.php" ?> -->
-                            <?php
-                            if (isset($success)) {
-                                echo $success;
-                            }
-                            if (isset($error)) {
-                                echo $error;
-                            }
-                            ?>
-                        </div>
-                    </div>
-                    <div class="row card p-4">
-
-                        <table id="example" class="display " style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Quiz ID</th>
-                                    <th>Module ID</th>
-                                    <th>Date</th>
-
-
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-
-                                $sql = "SELECT  tblquiz.quiz_Id,tblmodules.module_name, tblquiz.date, tblquiz.modules_Id from tblquiz inner join tblmodules on tblmodules.modules_Id = tblquiz.modules_Id";
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    // output data of each row
-                                    while ($row = $result->fetch_assoc()) {
-
-                                ?>
-                                        <tr>
-                                            <td><?= $row['quiz_Id'] ?></td>
-                                            <td><?= $row['module_name'] ?></td>
-                                            <td><?= $row['date'] ?></td>
-
-
-
-
-                                        </tr>
-                                <?php
-
+                                        $selectQ = "select * from tblquestions where question_Id = '$_GET[question_Id]'";
+                                        $resSelect = $conn->query($selectQ);
+                                        $row = $resSelect->fetch_assoc();
                                     }
-                                } else {
-                                }
-                                $conn->close(); ?>
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Quiz ID</th>
-                                    <th>Module ID</th>
-                                    <th>Date</th>
+                                    ?>
+                                    <form class="form-horizontal form-material" method="POST" enctype="multipart/form-data">
+                                        <!-- <div class="mb-3">
+                                    <label for="recipe" class="form-label">Module ID</label>
+                                    <input type="text" class="form-control" required name="modules_Id" placeholder="Chicken curry..">
+                                </div> -->
+                                        <div class="mb-3">
+                                            <label for="date" class="form-label">Question</label>
+                                            <input type="text" class="form-control" required name="description" value="<?= $row['description'] ?>" placeholder="Question">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="date" class="form-label">Time Duration</label>
+                                            <input type="time" value="<?= $row['time'] ?>" class="form-control without_ampm" required name="time">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="date" class="form-label">Difficulty</label>
+                                            <select class="form-select" aria-label="Default select example" required name="level" placeholder="Difficulty level">
+                                                <option selected>Select Level</option>
+                                                <option selected value="<?= $row['level'] ?>"><?= $row['level'] ?></option>
+                                                <option value="Easy">Easy</option>
+                                                <option value="Medium">Medium</option>
+                                                <option value="Hard">Hard</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="date" class="form-label">Quiz ID</label>
+                                            <input type="text" class="form-control" required name="quiz_Id" value="<?= $row['quiz_Id'] ?>" placeholder="module name">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="date" class="form-label">Question Type</label>
+                                            <select class="form-select" aria-label="Default select example" required name="question_type">
+                                                <option selected value="<?= $row['question_type'] ?>"><?= $row['question_type'] ?></option>
+                                                <option value="Multiple Choice">Multiple Choice</option>
+                                                <option value="Problem Solving">Problem Solving</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="submit" name="editQuestions" value="Update" class="btn text-white btn-success">
+                                        </div>
 
 
-                                   
-                                </tr>
-                            </tfoot>
-                        </table>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+
 
                     </div>
-
                 </div>
-                <div class="row"></div>
+                <!-- Button trigger modal -->
 
-                <div class="row"></div>
+
+                <!-- Modal -->
 
             </div>
+            <div class="row"></div>
 
-            <footer class="footer text-center">
-                Basic E-learning Programming Application<strong>copy right &copy 2022</strong>
-            </footer>
+            <div class="row"></div>
 
         </div>
 
+        <footer class="footer text-center">
+            Basic E-learning Programming Application<strong>copy right &copy 2022</strong>
+        </footer>
+
     </div>
-    <script>
-        function AjaxCallWithPromise() {
-            return new Promise(function(resolve, reject) {
-                const objXMLHttpRequest = new XMLHttpRequest();
 
-                objXMLHttpRequest.onreadystatechange = function() {
-                    if (objXMLHttpRequest.readyState === 4) {
-                        if (objXMLHttpRequest.status == 200) {
-                            resolve(objXMLHttpRequest.responseText);
-                        } else {
-                            reject('Error Code: ' + objXMLHttpRequest.status + ' Error Message: ' + objXMLHttpRequest.statusText);
-                        }
-                    }
-                }
+    </div>
 
-                objXMLHttpRequest.open('GET', '../server/process/averageRatings.php');
-                objXMLHttpRequest.send();
-            });
-        }
-
-        AjaxCallWithPromise().then(
-            data => {
-                // console.log('Success Response: ' + data)
-                // console.log(JSON.parse(data))
-                let parses = JSON.parse(data);
-                let yValuess = parses.map((value) => {
-                    return value.averageRatings;
-                })
-                let xValuess = parses.map((value) => {
-                    return value.title;
-                })
-                console.log(xValuess);
-                console.log(yValuess);
-
-                // var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-                // var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
-
-                new Chart("myCharts", {
-                    type: "line",
-                    data: {
-                        labels: xValuess,
-                        datasets: [{
-                            fill: false,
-                            lineTension: 0,
-                            backgroundColor: "rgba(0,0,255,1.0)",
-                            borderColor: "rgba(0,0,255,0.1)",
-                            data: yValuess
-                        }]
-                    },
-                    options: {
-                        legend: {
-                            display: false
-                        },
-                        // scales: {
-                        //     yAxes: [{
-                        //         ticks: {
-                        //             min: 6,
-                        //             max: 16
-                        //         }
-                        //     }],
-                        // }
-                    }
-                });
-
-            },
-
-            error => {
-                console.log(error)
-            }
-        );
-    </script>
-    <script>
-        function AjaxCallWithPromise() {
-            return new Promise(function(resolve, reject) {
-                const objXMLHttpRequest = new XMLHttpRequest();
-
-                objXMLHttpRequest.onreadystatechange = function() {
-                    if (objXMLHttpRequest.readyState === 4) {
-                        if (objXMLHttpRequest.status == 200) {
-                            resolve(objXMLHttpRequest.responseText);
-                        } else {
-                            reject('Error Code: ' + objXMLHttpRequest.status + ' Error Message: ' + objXMLHttpRequest.statusText);
-                        }
-                    }
-                }
-
-                objXMLHttpRequest.open('GET', '../server/process/user.php');
-                objXMLHttpRequest.send();
-            });
-        }
-
-        AjaxCallWithPromise().then(
-            data => {
-                // console.log('Success Response: ' + typeof data)
-                // console.log(JSON.parse(data))
-                let parse = JSON.parse(data);
-                let yValues = parse.map((value) => {
-                    return value.averageRatings;
-                })
-                let xValues = parse.map((value) => {
-                    return value.title;
-                })
-                // console.log(x);
-                // console.log(y);
-
-                var barColors = [
-                    "#06BFE8",
-                    "#FBBA7E",
-                    "#5885F9",
-                    "#FFCD4B",
-                    "#1e7145"
-                ];
-
-                new Chart("myChart", {
-                    type: "pie",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                        }]
-                    },
-                    options: {
-                        title: {
-                            display: true,
-                            // text: "Total recipe base on popularity"
-                        }
-                    }
-                });
-
-            },
-
-            error => {
-                console.log(error)
-            }
-        );
-    </script>
     <script>
         $(document).ready(function() {
             $('#example').DataTable();
