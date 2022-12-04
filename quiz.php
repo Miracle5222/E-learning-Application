@@ -17,7 +17,7 @@ if (!isset($_SESSION['admin_id'])) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Recipe Management System</title>
+    <title>Basic Programming E-learning Application</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/xtreme-admin-lite/" />
 
     <link rel="icon" type="image/png" sizes="16x16" href="./uploads/images/icon.png" />
@@ -226,7 +226,7 @@ if (!isset($_SESSION['admin_id'])) {
                                     <th>Module ID</th>
                                     <th>Date</th>
 
-
+                                    <th>Edit</th>
 
                                 </tr>
                             </thead>
@@ -247,6 +247,14 @@ if (!isset($_SESSION['admin_id'])) {
                                             <td><?= $row['date'] ?></td>
 
 
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-start align-items-center flex-row ">
+                                                    <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
+                                                    <a onclick="confirm('are you sure you want to delete this Quiz?')" href="./addQuiz.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+
+                                                    <a href="questions.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2 btn btn-primary">View</a>
+                                                </div>
+                                            </td>
 
 
                                         </tr>
@@ -263,9 +271,9 @@ if (!isset($_SESSION['admin_id'])) {
                                     <th>Quiz ID</th>
                                     <th>Module ID</th>
                                     <th>Date</th>
+                                    <th>Edit</th>
 
 
-                                   
                                 </tr>
                             </tfoot>
                         </table>

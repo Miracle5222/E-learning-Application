@@ -17,7 +17,8 @@ if (!isset($_SESSION['admin_id'])) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Recipe Management System</title>
+
+    <title>Basic Programming E-learning Application</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/xtreme-admin-lite/" />
 
     <link rel="icon" type="image/png" sizes="16x16" href="./uploads/images/icon.png" />
@@ -40,12 +41,12 @@ if (!isset($_SESSION['admin_id'])) {
 
 <body>
 
-    <div class="preloader">
+    <!-- <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
             <div class="lds-pos"></div>
         </div>
-    </div>
+    </div> -->
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
@@ -170,7 +171,7 @@ if (!isset($_SESSION['admin_id'])) {
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-5">
-                        <h4 class="page-title">Dashboard</h4>
+                        <h4 class="page-title">Modules</h4>
                     </div>
                 </div>
             </div>
@@ -195,23 +196,158 @@ if (!isset($_SESSION['admin_id'])) {
 
                 </div> -->
 
+
                 <div class="row ">
-                    <div class="col-md-5">
+                    <div class="col-md-5 my-4">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Add Modules
+                        </button>
 
 
                     </div>
                 </div>
                 <div class="container ">
                     <div class="row">
+                        <?php
+
+
+
+                        if (isset($_POST['submit'])) {
+
+
+                            $module_name = $_POST['title'];
+                            $status = $_POST['status'];
+                            $programming_Id = $_POST['language'];
+
+                            $inserted = false;
+                            $sql = "insert into tblmodules (module_name,programming_Id,status)values('$module_name','$programming_Id','$status')";
+                            $result = $conn->query($sql);
+
+
+
+                            if ($result) {
+
+                                $selectModules = "select * from tblmodules where module_name = '$module_name'";
+                                $resselectModules = $conn->query($selectModules);
+
+                                $addAllStudent = "select * from tblstudentlang where programming_Id = '$programming_Id'";
+
+                                $resStudent = $conn->query($addAllStudent);
+
+                                if ($resselectModules->num_rows > 0) {
+                                    while ($rowModules = $resselectModules->fetch_assoc()) {
+
+                                        if ($resStudent->num_rows > 0) {
+                                            while ($rowRes = $resStudent->fetch_assoc()) {
+                                                $insertQuiz = "insert into tblmyclass(class_Id,modules_Id,module_status)value('$rowRes[class_Id]','$rowModules[modules_Id]','$rowModules[status]')";
+                                                if ($conn->query($insertQuiz) === TRUE) {
+
+                                                    $inserted = true; ?>
+
+
+                                    <?php }
+                                            }
+                                        }
+                                    }
+                                }
+                                if ($inserted) { ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        Module added successfully.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php
+                                }
+
+                                ?>
+
+
+                            <?php
+
+                            } else { ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong> Failed to add Module</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                        <?php }
+                        }
+                        ?>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="text-info text-center py-4">Add Modules</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" enctype="multipart/form-data">
+
+                                            <div class="form-group">
+                                                <label for="title">Module Name</label>
+                                                <textarea type="text" placeholder="title..." class="form-control my-2" name="title"></textarea>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputState">State</label>
+                                                <select id="inputState" class="form-control" name="status">
+                                                    <option value="lock" selected>lock</option>
+                                                    <option value="unlock">unlock</option>
+
+                                                    <option value="done">done</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="language">Language_ID</label>
+                                                <?php
+                                                $selectLang = "select * from programminglang";
+                                                $res = $conn->query($selectLang);
+
+                                                if ($res->num_rows > 0) { ?>
+                                                    <select id="inputState" class="form-control" name="language">
+                                                        <?php while ($rowLang = $res->fetch_assoc()) { ?>
+
+                                                            <option value="<?= $rowLang['programming_Id'] ?>"><?= $rowLang['name'] ?></option>
+                                                        <?php   } ?>
+                                                    </select>
+                                                <?php  }
+                                                ?>
+
+                                            </div>
+
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success text-white" name="submit">Submit</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-12">
 
-                            <!-- <?php include  "./process/deleteRecipe.php" ?> -->
+                            <?php if (isset($_GET['modules_Id'])) {
+
+                                $id = $_GET['modules_Id'];
+                                $sql = "DELETE FROM tblmodules WHERE modules_Id ='$id'";
+
+
+                                if ($conn->query($sql) === TRUE) { ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Module deleted successfully</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong> Failed to delete Module</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
                             <?php
-                            if (isset($success)) {
-                                echo $success;
-                            }
-                            if (isset($error)) {
-                                echo $error;
+                                }
                             }
                             ?>
                         </div>
@@ -233,7 +369,7 @@ if (!isset($_SESSION['admin_id'])) {
                                 <?php
 
                                 if (isset($_GET['programming_Id'])) {
-                       
+
                                     $sql = "SELECT tblmodules.`modules_Id`, tblmodules.`module_name`, tblmodules.`status`, programminglang.`name` FROM tblmodules INNER JOIN programminglang ON programminglang.`programming_Id` = tblmodules.`programming_Id`  where tblmodules.`programming_Id` = '$_GET[programming_Id]'  ";
                                 } else {
                                     $sql = "SELECT tblmodules.`modules_Id`, tblmodules.`module_name`, tblmodules.`status`, programminglang.`name` FROM tblmodules INNER JOIN programminglang ON programminglang.`programming_Id` = tblmodules.`programming_Id`  ";
@@ -257,7 +393,7 @@ if (!isset($_SESSION['admin_id'])) {
                                             <td>
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
                                                     <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this module?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+                                                    <a onclick="confirm('are you sure you want to delete this module?')" href="./modules.php?modules_Id=<?= $row['modules_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
                                                     <a href="lesson.php?modules_Id=<?= $row['modules_Id'] ?>" class="mx-2 btn btn-primary">View Lessons</a>
                                                 </div>
                                             </td>

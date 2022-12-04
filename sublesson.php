@@ -17,7 +17,7 @@ if (!isset($_SESSION['admin_id'])) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Recipe Management System</title>
+    <title>Basic Programming E-learning Application</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/xtreme-admin-lite/" />
 
     <link rel="icon" type="image/png" sizes="16x16" href="./uploads/images/icon.png" />
@@ -255,7 +255,7 @@ if (!isset($_SESSION['admin_id'])) {
                 <div class="row ">
                     <div class="col-md-5 my-4">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Add Lesson Content
+                            Add Sub Content
                         </button>
 
                     </div>
@@ -307,12 +307,11 @@ if (!isset($_SESSION['admin_id'])) {
                                     // output data of each row
                                     while ($row = $result->fetch_assoc()) {
 
-                                ?>
-                                        <tr>
+                                ?> <tr>
 
                                             <td><?= $row['sublesson_Id'] ?></td>
-                                            <td class="text-truncate"><?= $row['header'] ?></td>
-                                            <td class="text-truncate"><?= $row['paragraph'] ?></td>
+                                            <td><?= $row['header'] ?></td>
+                                            <td><?= $row['paragraph'] ?></td>
                                             <td><?= $row['video'] ?></td>
                                             <td><?= $row['images'] ?></td>
 

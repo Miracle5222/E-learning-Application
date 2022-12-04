@@ -17,7 +17,8 @@ if (!isset($_SESSION['admin_id'])) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Recipe Management System</title>
+
+    <title>Basic Programming E-learning Application</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/xtreme-admin-lite/" />
 
     <link rel="icon" type="image/png" sizes="16x16" href="./uploads/images/icon.png" />
@@ -180,13 +181,13 @@ if (!isset($_SESSION['admin_id'])) {
 
         <div class="page-wrapper">
 
-            <div class="page-breadcrumb">
+            <!-- <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-5">
                         <h4 class="page-title">Questions</h4>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="container-fluid">
                 <!-- 
@@ -244,17 +245,12 @@ if (!isset($_SESSION['admin_id'])) {
 
                     ?>
                 </div>
-                <div class="row ">
-                    <div class="col-md-5 my-4">
 
-                        <a href="questions.php" class="btn btn-success  text-white">Back</a>
-
-                    </div>
-                </div>
                 <div class="container ">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card">
+                                <h2 class="text-info text-center py-4">Edit Qestions</h2>
                                 <div class="card-body">
                                     <?php
                                     if (isset($_GET['question_Id'])) {
@@ -304,6 +300,7 @@ if (!isset($_SESSION['admin_id'])) {
                                         </div>
                                         <div class="mb-3">
                                             <input type="submit" name="editQuestions" value="Update" class="btn text-white btn-success">
+                                            <a href="questions.php" class="btn btn-outline-success ">Back</a>
                                         </div>
 
 

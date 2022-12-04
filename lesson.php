@@ -17,7 +17,7 @@ if (!isset($_SESSION['admin_id'])) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Recipe Management System</title>
+    <title>Basic Programming E-learning Application</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/xtreme-admin-lite/" />
 
     <link rel="icon" type="image/png" sizes="16x16" href="./uploads/images/icon.png" />
@@ -171,7 +171,7 @@ if (!isset($_SESSION['admin_id'])) {
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-5">
-                        <h4 class="page-title">Dashboard</h4>
+                        <h4 class="page-title">Lessons</h4>
                     </div>
                 </div>
             </div>
@@ -197,22 +197,149 @@ if (!isset($_SESSION['admin_id'])) {
                 </div> -->
 
                 <div class="row ">
-                    <div class="col-md-5">
+                    <div class="col-md-5 my-4">
+                        <?php
 
 
+
+                        if (isset($_POST['submit'])) {
+
+                            $lessonname = $_POST['lessonname'];
+                            $status = $_POST['status'];
+                            $moduleId = $_POST['moduleId'];
+                            $lessonNo = $_POST['lessonNo'];
+                            $inserted = false;
+
+
+                            $sql = "insert into tbllessons (lesson_name,modules_Id,status,lessons)values('$lessonname','$moduleId','$status','$lessonNo')";
+                            $result = $conn->query($sql);
+
+
+
+                            if ($result) {
+
+                                $selectModules = "select * from tbllessons where lessons = '$lessonNo'";
+                                $resselectModules = $conn->query($selectModules);
+
+                                $addAllStudent = "SELECT tblstudentlang.`class_Id`, tblstudentlang.`programming_Id` ,tblmodules.`modules_Id`, tbllessons.`lesson_Id` FROM tblstudentlang 
+                                INNER JOIN tblmodules ON  tblmodules.`programming_Id` =tblstudentlang.`programming_Id` 
+                                INNER JOIN tbllessons ON tbllessons.`modules_Id` = tblmodules.`modules_Id` WHERE  tbllessons.lessons = '$lessonNo'";
+
+                                $resStudent = $conn->query($addAllStudent);
+
+                                if ($resselectModules->num_rows > 0) {
+                                    while ($rowModules = $resselectModules->fetch_assoc()) {
+
+                                        if ($resStudent->num_rows > 0) {
+                                            while ($rowRes = $resStudent->fetch_assoc()) {
+                                                $insertQuiz = "insert into tblmylessons(class_Id,lesson_Id,lesson_status,modules_Id)value('$rowRes[class_Id]','$rowModules[lesson_Id]','$rowModules[status]','$rowModules[modules_Id]')";
+                                                if ($conn->query($insertQuiz) === TRUE) {
+
+                                                    $inserted = true; ?>
+
+
+                                    <?php }
+                                            }
+                                        }
+                                    }
+                                }
+                                if ($inserted) { ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        Lesson added successfully.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php
+                                }
+
+                                ?>
+
+
+                            <?php
+
+                            } else { ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong> Failed to add Lesson</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                        <?php }
+                        }
+                        ?>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Add Lessons
+                        </button>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="text-info text-center py-4">Add Lesson</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" enctype="multipart/form-data">
+
+                                            <div class="form-group">
+                                                <label for="title">Lesson Name</label>
+                                                <input type="text" placeholder="lesson name..." class="form-control my-2" name="lessonname" />
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputState">State</label>
+                                                <select id="inputState" class="form-select" name="status">
+                                                    <option value="lock" selected>lock</option>
+                                                    <option value="unlock">unlock</option>
+
+                                                    <option value="done">done</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="language">Module ID</label>
+                                                <input type="text" placeholder="1.2" class="form-control my-2" name="moduleId" value="<?= $_GET['modules_Id'] ?>" />
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="title">Lesson No.</label>
+                                                <input type="text" placeholder="1.2" class="form-control my-2" name="lessonNo" />
+
+                                            </div>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success text-white" name="submit">Submit</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="container ">
                     <div class="row">
                         <div class="col-md-12">
 
-                            <!-- <?php include  "./process/deleteRecipe.php" ?> -->
+                            <?php if (isset($_GET['lesson_Id'])) {
+
+                                $id = $_GET['lesson_Id'];
+                                $sql = "DELETE FROM tbllessons WHERE lesson_Id ='$id'";
+
+
+                                if ($conn->query($sql) === TRUE) { ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Lesson deleted successfully</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong> Failed to delete Lesson</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
                             <?php
-                            if (isset($success)) {
-                                echo $success;
-                            }
-                            if (isset($error)) {
-                                echo $error;
+                                }
                             }
                             ?>
                         </div>
@@ -237,9 +364,9 @@ if (!isset($_SESSION['admin_id'])) {
 
 
                                 if (isset($_GET['modules_Id'])) {
-                                    $sql = "SELECT * from tbllessons where modules_Id = '$_GET[modules_Id]'";
+                                    $sql = "SELECT * from tbllessons where modules_Id = '$_GET[modules_Id]' order by lessons";
                                 } else {
-                                    $sql = "SELECT * from tbllessons";
+                                    $sql = "SELECT * from tbllessons  order by lessons";
                                 }
                                 $result = $conn->query($sql);
 
@@ -260,10 +387,9 @@ if (!isset($_SESSION['admin_id'])) {
                                             <td>
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
                                                     <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+                                                    <a onclick="confirm('are you sure you want to delete this Lesson?')" href="./lesson.php?lesson_Id=<?= $row['lesson_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
                                                     <a href="sublesson.php?lesson_Id=<?= $row['lesson_Id'] ?>" class="mx-2 btn btn-primary">View Content</a>
-                                                    <!-- <a href="./addIngridients.php?recipeId=<?= $row['recipe_id'] ?>" class=" btn btn-dark text-white">Ingridients</a> -->
-                                                </div>
+
                                             </td>
                                         </tr>
                                 <?php
