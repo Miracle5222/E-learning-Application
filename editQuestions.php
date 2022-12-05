@@ -4,7 +4,7 @@ session_start();
 <?php
 
 if (!isset($_SESSION['admin_id'])) {
-    header("index.php");
+    header("Location: index.php");
 }
 ?>
 <?php include "./connections/config.php" ?>
@@ -268,7 +268,8 @@ if (!isset($_SESSION['admin_id'])) {
                                 </div> -->
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Question</label>
-                                            <input type="text" class="form-control" required name="description" value="<?= $row['description'] ?>" placeholder="Question">
+
+                                            <textarea type="text" class="form-control" required name="description" rows="6" placeholder="Question"><?= $row['description'] ?></textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Time Duration</label>

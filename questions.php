@@ -4,7 +4,7 @@ session_start();
 <?php
 
 if (!isset($_SESSION['admin_id'])) {
-    header("index.php");
+    header("Location: index.php");
 }
 ?>
 <?php include "./connections/config.php" ?>
@@ -250,7 +250,7 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Questions
                         </button>
-                        <a href="quiz.php" class="btn btn-success  text-white">Back</a>
+                        <a href="addQuiz.php" class="btn btn-success  text-white">Back</a>
 
                     </div>
                 </div>
@@ -278,7 +278,7 @@ if (!isset($_SESSION['admin_id'])) {
                                     <th>Question</th>
                                     <th>time</th>
                                     <th>Difficulty Level</th>
-                                    <th>Quiz ID</th>
+                                    <th>Question Type</th>
                                     <th>Edit</th>
                                 </tr>
                             </thead>
@@ -305,7 +305,7 @@ if (!isset($_SESSION['admin_id'])) {
                                             <td><?= $row['description'] ?></td>
                                             <td><?= $row['time'] ?></td>
                                             <td><?= $row['level'] ?></td>
-                                            <td><?= $row['quiz_Id'] ?></td>
+                                            <td><?= $row['question_type'] ?></td>
 
                                             <td>
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
@@ -354,7 +354,8 @@ if (!isset($_SESSION['admin_id'])) {
                                 </div> -->
                                             <div class="mb-3">
                                                 <label for="date" class="form-label">Question</label>
-                                                <input type="text" class="form-control" required name="description" placeholder="Question">
+                                                <textarea type="text" class="form-control" required name="description" rows="3" placeholder="Question"></textarea>
+
                                             </div>
                                             <div class="mb-3">
                                                 <label for="date" class="form-label">Time Duration</label>

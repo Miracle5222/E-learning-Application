@@ -30,12 +30,13 @@ if ($resultModules->num_rows > 0) {
     }
 }
 
-$selectlessons = "SELECT tbllessons.`lessons`, tbllessons.`lesson_name`, tblmodules.`module_name`, tblmylessons.`modules_Id`, tblmylessons.`lesson_status` ,tblmylessons.`class_Id` ,tblmylessons.`myLessons_Id` FROM tblmylessons INNER JOIN tbllessons ON tbllessons.`lesson_Id` = tblmylessons.`lesson_Id` INNER JOIN tblstudentlang ON tblstudentlang.`class_Id` = tblmylessons.`class_Id` INNER JOIN tblmodules ON tblmodules.`modules_Id` = tblmylessons.`modules_Id`  WHERE tblstudentlang.`student_Id` = '$student_id '";
+$selectlessons = "SELECT tbllessons.`lessons`, tbllessons.`lesson_name`, tbllessons.`lesson_Id`, tblmodules.`module_name`, tblmylessons.`modules_Id`, tblmylessons.`lesson_status` ,tblmylessons.`class_Id` ,tblmylessons.`myLessons_Id` FROM tblmylessons INNER JOIN tbllessons ON tbllessons.`lesson_Id` = tblmylessons.`lesson_Id` INNER JOIN tblstudentlang ON tblstudentlang.`class_Id` = tblmylessons.`class_Id` INNER JOIN tblmodules ON tblmodules.`modules_Id` = tblmylessons.`modules_Id`  WHERE tblstudentlang.`student_Id` = '$student_id '";
 $resultLessons = $conn->query($selectlessons);
 
 
 if ($resultLessons->num_rows > 0) {
     while ($rowLessons = $resultLessons->fetch_assoc()) {
+        $arr4['lesson_Id'] = $rowLessons['lesson_Id'];
         $arr4['lessons'] = $rowLessons['lessons'];
         $arr4['lesson_name'] = $rowLessons['lesson_name'];
         $arr4['modules_Id'] = $rowLessons['modules_Id'];

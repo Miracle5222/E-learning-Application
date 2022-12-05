@@ -34,7 +34,7 @@ $questionsResult = $selectQueryQuestions->fetch_assoc();
 
 $questionLength = $questionsResult['length'];
 $selectQuiz = "";
-if (($score * 100) / $questionLength  < 80) {
+if (round(($score * 100)) / $questionLength  < 80) {
     $remarks = "Failed";
 
     $selectQuiz = "insert into tblresult (quiz_Id,student_Id,remarks,endedAt,score) values ('$quiz_id','$student_id','$remarks','$dateToday','$score')";

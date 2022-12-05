@@ -1,13 +1,14 @@
 <?php
 session_start();
 ?>
+
+<?php include "./connections/config.php" ?>
 <?php
 
 if (!isset($_SESSION['admin_id'])) {
-    header("index.php");
+    header("Location: index.php");
 }
 ?>
-<?php include "./connections/config.php" ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 

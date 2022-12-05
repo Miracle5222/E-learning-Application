@@ -4,7 +4,7 @@ session_start();
 <?php
 
 if (!isset($_SESSION['admin_id'])) {
-    header("index.php");
+    header("Location: index.php");
 }
 ?>
 <?php include "./connections/config.php" ?>

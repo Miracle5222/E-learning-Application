@@ -177,101 +177,69 @@ if (!isset($_SESSION['admin_id'])) {
             </div>
 
             <div class="container-fluid">
+
+
+                <?php if (isset($_GET['codesnippets'])) {
+
+                    $id = $_GET['codesnippets'];
+                    $sql = "DELETE FROM tblsnippets WHERE snippets_Id ='$id'";
+
+
+                    if ($conn->query($sql) === TRUE) { ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Snippets deleted successfully</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php } else { ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong> Failed to delete Snippets</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                 <?php
-
-                if (isset($_POST['submit'])) {
-
-                    $video = $_POST['video'];
-
-                    $heading = $_POST['heading'];
-                    $lessonId = $_POST['lessonId'];
-                    $paragraph = $_POST['paragraph'];
-
-                    // echo  $video;
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo  $heading;
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo  $lessonId;
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo  $paragraph;
-
-
-
-
-
-                    if (isset($_FILES['image']['name'])) {
-
-                        $file_name = $_FILES['image']['name'];
-
-
-                        $file_tmp = $_FILES['image']['tmp_name'];
-                        // $filePath =  "./uploads/images/$file_name";
-
-                        move_uploaded_file($file_tmp, "./uploads/images/" . $file_name);
-
-                        $addquerry = "insert into tblsublessons values (0,'$heading','$paragraph','$video','$file_name','$lessonId')";
-                        $iquery = mysqli_query($conn, $addquerry);
-
-                        if ($iquery) { ?>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>Success!</strong> Content added successfully.
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-
-
-                        <?php
-
-                        } else { ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong> Failed to add Content</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                <?php }
                     }
                 }
                 ?>
-                <!-- 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Popularity</h2>
-                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Average Ratings</h2>
-                                <canvas id="myCharts" style="width:100%;max-width:600px"></canvas>
-                        </div>
-                    </div>
-
-
-
-                </div> -->
-
                 <div class="row ">
                     <div class="col-md-5 my-4">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Add Sub Content
+                            Add Snippets
                         </button>
 
                     </div>
                 </div>
+
                 <div class="container ">
                     <div class="row">
                         <div class="col-md-12">
 
-                            <!-- <?php include  "./process/deleteRecipe.php" ?> -->
                             <?php
-                            if (isset($success)) {
-                                echo $success;
+
+                            if (isset($_POST['submit'])) {
+
+                                $Snippets = $_POST['Snippets'];
+                                $sublesson_Id = $_POST['sublesson_Id'];
+                                $language = $_POST['language'];
+                                $sql = "insert into tblsnippets (languageName,snippets,sublesson_Id)values('$language','$Snippets','$sublesson_Id')";
+                                $result = $conn->query($sql);
+
+                            ?>
+
+
+                                <?php
+                                if ($result) { ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        Snippets added successfully.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php
+                                } else { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong> Failed to add Snippets</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                            <?php }
                             }
-                            if (isset($error)) {
-                                echo $error;
-                            }
+
                             ?>
                         </div>
                     </div>
@@ -280,12 +248,9 @@ if (!isset($_SESSION['admin_id'])) {
                         <table id="example" class="display " style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Content ID</th>
-                                    <th>Heading</th>
-                                    <th>Paragraph</th>
-                                    <th>Video ID</th>
-                                    <th>File Name</th>
-                                    <th>Lesson ID</th>
+                                    <th>Language Name</th>
+                                    <th>Snippets</th>
+                                    <th>Sublesson ID</th>
                                     <th>Edit</th>
                                 </tr>
                             </thead>
@@ -294,12 +259,12 @@ if (!isset($_SESSION['admin_id'])) {
 
 
 
-                                if (isset($_GET['lesson_Id'])) {
+                                if (isset($_GET['sublesson_Id'])) {
 
-                                    $sql = "SELECT * from tblsublessons where lesson_Id = '$_GET[lesson_Id]'";
+                                    $sql = "SELECT * from tblsnippets where sublesson_Id = '$_GET[sublesson_Id]'";
                                 } else {
 
-                                    $sql = "SELECT * from tblsublessons ";
+                                    $sql = "SELECT * from tblsnippets ";
                                 }
                                 $result = $conn->query($sql);
 
@@ -309,20 +274,16 @@ if (!isset($_SESSION['admin_id'])) {
 
                                 ?> <tr>
 
+                                            <td><?= $row['languageName'] ?></td>
+                                            <td><?= $row['snippets'] ?></td>
                                             <td><?= $row['sublesson_Id'] ?></td>
-                                            <td><?= $row['header'] ?></td>
-                                            <td><?= $row['paragraph'] ?></td>
-                                            <td><?= $row['video'] ?></td>
-                                            <td><?= $row['images'] ?></td>
 
-                                            <td><?= $row['lesson_Id'] ?></td>
 
 
                                             <td>
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
                                                     <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deletesublesson.php?sublesson_Id=<?= $row['sublesson_Id'] ?>&lesson_Id=<?= $row['lesson_Id'] ?>&image=<?= $row['images'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-                                                    <a href="codesnippets.php?sublesson_Id=<?= $row['sublesson_Id'] ?>" class="mx-2   btn btn-success text-white">Snippets</a>
+                                                    <a onclick="confirm('are you sure you want to delete this Snippets?')" href="./codesnippets.php?codesnippets=<?= $row['snippets_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
                                                 </div>
                                             </td>
@@ -337,13 +298,11 @@ if (!isset($_SESSION['admin_id'])) {
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Content ID</th>
-                                    <th>Heading</th>
-                                    <th>Paragraph</th>
-                                    <th>Video ID</th>
-                                    <th>File Name</th>
-                                    <th>Lesson ID</th>
+                                    <th>Language Name</th>
+                                    <th>Snippets</th>
+                                    <th>Sublesson ID</th>
                                     <th>Edit</th>
+
                                 </tr>
                             </tfoot>
                         </table>
@@ -360,35 +319,21 @@ if (!isset($_SESSION['admin_id'])) {
                                     <label for="recipe" class="form-label">Module ID</label>
                                     <input type="text" class="form-control" required name="modules_Id" placeholder="Chicken curry..">
                                 </div> -->
-
                                             <div class="mb-3">
-                                                <label for="date" class="form-label">Video ID</label>
-                                                <input type="text" class="form-control" name="video" placeholder="vOEN65nm4YU">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Image</label>
-                                                <input type="file" name="image" accept="image/*" class="form-control">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Heading</label>
-
-                                                <textarea id="" rows="5" name="heading" class="form-control" placeholder="heading text"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Lesson ID</label>
-                                                <?php if (!isset($_GET['lesson_Id'])) { ?>
-                                                    <input type="text" class="form-control" name="lessonId" placeholder="module name">
-                                                <?php } else { ?>
-
-                                                    <input type="text" class="form-control" name="lessonId" value="<?= $_GET['lesson_Id'] ?>" placeholder="module name">
-                                                <?php } ?>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Paragraph</label>
-
-                                                <textarea id="" rows="5" name="paragraph" class="form-control" placeholder="paragraph text"></textarea>
+                                                <label for="date" class="form-label">Language</label>
+                                                <input type="text" class="form-control" name="language" placeholder="language">
                                             </div>
 
+                                            <div class="mb-3">
+                                                <label for="date" class="form-label">Sublesson ID</label>
+                                                <input type="text" class="form-control" name="sublesson_Id" value="<?= $_GET['sublesson_Id'] ?>" placeholder="vOEN65nm4YU">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="date" class="form-label">Snippets</label>
+
+                                                <textarea id="" rows="5" name="Snippets" class="form-control" placeholder="heading text"></textarea>
+                                            </div>
 
 
 
@@ -406,140 +351,7 @@ if (!isset($_SESSION['admin_id'])) {
                     </div>
 
                 </div>
-                <div class="row ">
-                    <div class="col-md-5 my-4">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Add Lesson Content
-                        </button>
 
-                    </div>
-                </div>
-                <!-- <div class="container ">
-                    <div class="row">
-                        <div class="col-md-12">
-
-                        </div>
-                    </div>
-                    <div class="row card p-4">
-
-                        <table id="examples" class="display " style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Content ID</th>
-                                    <th>Heading</th>
-                                    <th>Paragraph</th>
-                                    <th>Video ID</th>
-                                    <th>File Name</th>
-                                    <th>Lesson ID</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-
-                                $sql = "SELECT * from tblsublessons";
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    // output data of each row
-                                    while ($row = $result->fetch_assoc()) {
-
-                                ?>
-                                        <tr>
-
-                                            <td><?= $row['sublesson_Id'] ?></td>
-                                            <td><?= $row['header'] ?></td>
-                                            <td><?= $row['paragraph'] ?></td>
-                                            <td><?= $row['video'] ?></td>
-                                            <td><?= $row['images'] ?></td>
-
-                                            <td><?= $row['lesson_Id'] ?></td>
-
-
-                                            <td>
-                                                <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                    <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deletesublesson.php?sublesson_Id=<?= $row['sublesson_Id'] ?>&lesson_Id=<?= $row['lesson_Id'] ?>&image=<?= $row['images'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-                                                  
-                                                </div>
-                                            </td>
-                                        </tr>
-                                <?php
-
-                                    }
-                                } else {
-                                }
-                                $conn->close(); ?>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Content ID</th>
-                                    <th>Heading</th>
-                                    <th>Paragraph</th>
-                                    <th>Video ID</th>
-                                    <th>File Name</th>
-                                    <th>Lesson ID</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="form-horizontal form-material" method="POST" enctype="multipart/form-data">
-                               
-
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Video ID</label>
-                                                <input type="text" class="form-control" name="video" placeholder="vOEN65nm4YU">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Image</label>
-                                                <input type="file" name="image" accept="image/*" class="form-control">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Heading</label>
-
-                                                <textarea id="" rows="5" name="heading" class="form-control" placeholder="heading text"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Lesson ID</label>
-                                                <?php if (!isset($_GET['lesson_Id'])) { ?>
-                                                    <input type="text" class="form-control" name="lessonId" placeholder="module name">
-                                                <?php } else { ?>
-
-                                                    <input type="text" class="form-control" name="lessonId" value="<?= $_GET['lesson_Id'] ?>" placeholder="module name">
-                                                <?php } ?>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date" class="form-label">Paragraph</label>
-
-                                                <textarea id="" rows="5" name="paragraph" class="form-control" placeholder="paragraph text"></textarea>
-                                            </div>
-
-
-
-
-
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-success text-white" name="submit">Submit</button>
-                                    </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> -->
                 <div class="row"></div>
 
                 <div class="row"></div>

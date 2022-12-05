@@ -52,6 +52,9 @@ if ($result->num_rows > 0) {
                 $allmodules = "SELECT * FROM tblmodules WHERE programming_Id = '$LanguageRow[programming_Id]'";
                 $resultAllmodules = $conn->query($allmodules);
 
+                $selectQuiz = "select * from tblquiz";
+                $resselectQuiz = $conn->query($selectQuiz);
+
                 if ($resultAllmodules->num_rows > 0) {
                     while ($rowModules = $resultAllmodules->fetch_assoc()) {
                         $insertModules = "insert into tblmyclass(class_Id,modules_Id,module_status)values('$rowClassId[class_Id]','$rowModules[modules_Id]','$rowModules[status]')";
@@ -68,6 +71,13 @@ if ($result->num_rows > 0) {
                                     }
                                 }
                             }
+                        }
+                    }
+                    while ($rowQuiz = $resselectQuiz->fetch_assoc()) {
+                        $insertQuiz = "insert into tblquizzes(quiz_Id,student_Id,modules_Id)value('$rowQuiz[quiz_Id]','$studentId[student_Id]','$rowQuiz[modules_Id]')";
+                        if ($conn->query($insertQuiz) === TRUE) {
+                            $success2 = "Quiz added Successfully";
+                            array_push($success1, $success2);
                         }
                     }
                 }
