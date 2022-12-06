@@ -204,6 +204,7 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Snippets
                         </button>
+                        <a href="sublesson.php?lesson_Id=<?= $_GET['lesson_Id'] ?>" class="btn btn-outline-success">Back</a>
 
                     </div>
                 </div>

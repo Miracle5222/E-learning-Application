@@ -23,7 +23,7 @@ $module_id = $obj['mymodule'];
 $quiz_id = $obj['quiz_id'];
 $student_id = $obj['student_id'];
 $score = $obj['score'];
-
+$score += 1;
 
 $status = "";
 $dateToday = date("h:i:s");

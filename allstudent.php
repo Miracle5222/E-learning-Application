@@ -1,13 +1,14 @@
 <?php
 session_start();
 ?>
+
+<?php include "./connections/config.php" ?>
 <?php
 
 if (!isset($_SESSION['admin_id'])) {
     header("Location: index.php");
 }
 ?>
-<?php include "./connections/config.php" ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
@@ -170,113 +171,189 @@ if (!isset($_SESSION['admin_id'])) {
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-5">
-                        <h4 class="page-title">Quiz</h4>
-
+                        <h4 class="page-title">Dashboard</h4>
                     </div>
                 </div>
             </div>
 
             <div class="container-fluid">
-                <!-- 
+
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Popularity</h2>
-                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                    <?php
+                    $modules = " select count(modules_Id) as totalModules from tblmodules";
+                    $resultModules = $conn->query($modules);
+                    $rowModules = $resultModules->fetch_assoc();
+                    if ($resultModules) {
+                        $_SESSION['totalModules'] = $rowModules['totalModules'];
+                    } else {
+                        $_SESSION['totalModules'] =  0;
+                    }
+                    $modules = " select count(lesson_Id) as totalLessons from tbllessons";
+                    $resultModules = $conn->query($modules);
+                    $rowModules = $resultModules->fetch_assoc();
+                    if ($resultModules) {
+                        $_SESSION['totalLessons'] = $rowModules['totalLessons'];
+                    } else {
+                        $_SESSION['totalLessons'] =  0;
+                    }
+
+                    $lang = " select count(programming_Id) as totalLanguage from programminglang";
+
+                    $resultlang = $conn->query($lang);
+                    $rowLang = $resultlang->fetch_assoc();
+                    if ($resultlang) {
+                        $_SESSION['totalLanguage'] = $rowLang['totalLanguage'];
+                    } else {
+                        $_SESSION['totalLanguage'] =  0;
+                    }
+
+                    ?>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <h3 class="text-center py-4">Total Modules</h2>
+                                <div style="height: 100px; width:100%; background-color:darkslategrey; border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
+                                    <h2 class="text-white"><?= $_SESSION['totalModules'] ?></h2>
+                                </div>
+                                <!-- <canvas id="myChart" style="width:100%;max-width:600px"></canvas> -->
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Average Ratings</h2>
-                                <canvas id="myCharts" style="width:100%;max-width:600px"></canvas>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <h3 class="text-center py-4">Total Lessons</h2>
+                                <div style="height: 100px; width:100%; background-color:darkcyan;  border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
+                                    <h2 class="text-white"><?= $_SESSION['totalLessons'] ?></h2>
+                                </div>
+                                <!-- <canvas id="myCharts" style="width:100%;max-width:600px"></canvas> -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <h3 class="text-center py-4">Total Language</h2>
+                                <div style="height: 100px; width:100%; background-color:darkcyan;  border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
+                                    <h2 class="text-white"><?= $_SESSION['totalLanguage'] ?></h2>
+                                </div>
+                                <!-- <canvas id="myCharts" style="width:100%;max-width:600px"></canvas> -->
                         </div>
                     </div>
 
 
-
-                </div> -->
+                </div>
 
                 <div class="row ">
                     <div class="col-md-5">
+                        <?php
+
+                        if (isset($_POST['submit'])) {
+
+                            $recipe = $_POST['recipe'];
+                            $description = $_POST['description'];
+                            $type = $_POST['type'];
+                            $date = $_POST['date'];
+                            $level = $_POST['level'];
+                            $cuisine = $_POST['cuisine'];
+                            $video = $_POST['video'];
+                            // $image = $_POST['image'];
+
+                            if (isset($_FILES['image']['name'])) {
+
+                                $file_name = $_FILES['image']['name'];
 
 
+                                $file_tmp = $_FILES['image']['tmp_name'];
+                                // $filePath =  "./uploads/images/$file_name";
+
+                                move_uploaded_file($file_tmp, "./uploads/images/" . $file_name);
+
+                                $addquerry = "insert into recipe_tbl(title,description,type,date_created,difficulty_level,cuisine,video,image) values ('$recipe','$description','$type','$date','$level ','$cuisine','$video','$file_name')";
+                                $iquery = mysqli_query($conn, $addquerry);
+
+                                if ($iquery) { ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Success!</strong> Recipe added successfully.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                <?php
+
+                                } else { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong> Add Recipe Failed!</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                        <?php }
+                            }
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="container ">
+
                     <div class="row">
+
                         <div class="col-md-12">
-
-                            <!-- <?php include  "./process/deleteRecipe.php" ?> -->
-                            <?php
-                            if (isset($success)) {
-                                echo $success;
-                            }
-                            if (isset($error)) {
-                                echo $error;
-                            }
-                            ?>
-                        </div>
-                    </div>
-                    <div class="row card p-4">
-
-                        <table id="example" class="display " style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Quiz ID</th>
-                                    <th>Module ID</th>
-                                    <th>Date</th>
-
-                                    <th>Edit</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-
-                                $sql = "SELECT  tblquiz.quiz_Id,tblmodules.module_name, tblquiz.date, tblquiz.modules_Id from tblquiz inner join tblmodules on tblmodules.modules_Id = tblquiz.modules_Id";
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    // output data of each row
-                                    while ($row = $result->fetch_assoc()) {
-
-                                ?>
+                            <div class="card p-4">
+                                <div class="card-header my-4">
+                                    <h3>Student Details</h3>
+                                </div>
+                                <table id="examples" class="display " style="width:100%">
+                                    <thead>
                                         <tr>
-                                            <td><?= $row['quiz_Id'] ?></td>
-                                            <td><?= $row['module_name'] ?></td>
-                                            <td><?= $row['date'] ?></td>
+                                            <th>Student ID</th>
+                                            <th>Email</th>
+                                            <th>Username</th>
 
-
-                                            <td class="text-center">
-                                                <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                    <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this Quiz?')" href="./addQuiz.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-
-                                                    <a href="questions.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2 btn btn-primary">View</a>
-                                                </div>
-                                            </td>
-
-
+                                            <th>Edit</th>
                                         </tr>
-                                <?php
+                                    </thead>
+                                    <tbody>
+                                        <?php
 
-                                    }
-                                } else {
-                                }
-                                $conn->close(); ?>
+                                        $sql = "SELECT * from tblstudent where student_Id= '$_GET[student_Id]'";
+                                        $result = $conn->query($sql);
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Quiz ID</th>
-                                    <th>Module ID</th>
-                                    <th>Date</th>
-                                    <th>Edit</th>
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while ($row = $result->fetch_assoc()) {
+
+                                        ?>
+                                                <tr>
 
 
-                                </tr>
-                            </tfoot>
-                        </table>
+                                                    <td><?= $row['student_Id'] ?></td>
+                                                    <td><?= $row['email'] ?></td>
+                                                    <td><?= $row['username'] ?></td>
+
+
+
+                                                    <td class="text-center">
+                                                        <div class="d-flex justify-content-start align-items-center flex-row ">
+                                                            <a href="editStudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-info">Edit</a>
+                                                            <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+
+                                                            <a href="allstudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-primary">View</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        <?php
+
+                                            }
+                                        } else {
+                                        }
+                                        $conn->close(); ?>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Student ID</th>
+                                            <th>Email</th>
+                                            <th>Username</th>
+
+                                            <th>Edit</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -295,149 +372,10 @@ if (!isset($_SESSION['admin_id'])) {
 
     </div>
     <script>
-        function AjaxCallWithPromise() {
-            return new Promise(function(resolve, reject) {
-                const objXMLHttpRequest = new XMLHttpRequest();
-
-                objXMLHttpRequest.onreadystatechange = function() {
-                    if (objXMLHttpRequest.readyState === 4) {
-                        if (objXMLHttpRequest.status == 200) {
-                            resolve(objXMLHttpRequest.responseText);
-                        } else {
-                            reject('Error Code: ' + objXMLHttpRequest.status + ' Error Message: ' + objXMLHttpRequest.statusText);
-                        }
-                    }
-                }
-
-                objXMLHttpRequest.open('GET', '../server/process/averageRatings.php');
-                objXMLHttpRequest.send();
-            });
-        }
-
-        AjaxCallWithPromise().then(
-            data => {
-                // console.log('Success Response: ' + data)
-                // console.log(JSON.parse(data))
-                let parses = JSON.parse(data);
-                let yValuess = parses.map((value) => {
-                    return value.averageRatings;
-                })
-                let xValuess = parses.map((value) => {
-                    return value.title;
-                })
-                console.log(xValuess);
-                console.log(yValuess);
-
-                // var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-                // var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
-
-                new Chart("myCharts", {
-                    type: "line",
-                    data: {
-                        labels: xValuess,
-                        datasets: [{
-                            fill: false,
-                            lineTension: 0,
-                            backgroundColor: "rgba(0,0,255,1.0)",
-                            borderColor: "rgba(0,0,255,0.1)",
-                            data: yValuess
-                        }]
-                    },
-                    options: {
-                        legend: {
-                            display: false
-                        },
-                        // scales: {
-                        //     yAxes: [{
-                        //         ticks: {
-                        //             min: 6,
-                        //             max: 16
-                        //         }
-                        //     }],
-                        // }
-                    }
-                });
-
-            },
-
-            error => {
-                console.log(error)
-            }
-        );
-    </script>
-    <script>
-        function AjaxCallWithPromise() {
-            return new Promise(function(resolve, reject) {
-                const objXMLHttpRequest = new XMLHttpRequest();
-
-                objXMLHttpRequest.onreadystatechange = function() {
-                    if (objXMLHttpRequest.readyState === 4) {
-                        if (objXMLHttpRequest.status == 200) {
-                            resolve(objXMLHttpRequest.responseText);
-                        } else {
-                            reject('Error Code: ' + objXMLHttpRequest.status + ' Error Message: ' + objXMLHttpRequest.statusText);
-                        }
-                    }
-                }
-
-                objXMLHttpRequest.open('GET', '../server/process/user.php');
-                objXMLHttpRequest.send();
-            });
-        }
-
-        AjaxCallWithPromise().then(
-            data => {
-                // console.log('Success Response: ' + typeof data)
-                // console.log(JSON.parse(data))
-                let parse = JSON.parse(data);
-                let yValues = parse.map((value) => {
-                    return value.averageRatings;
-                })
-                let xValues = parse.map((value) => {
-                    return value.title;
-                })
-                // console.log(x);
-                // console.log(y);
-
-                var barColors = [
-                    "#06BFE8",
-                    "#FBBA7E",
-                    "#5885F9",
-                    "#FFCD4B",
-                    "#1e7145"
-                ];
-
-                new Chart("myChart", {
-                    type: "pie",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                        }]
-                    },
-                    options: {
-                        title: {
-                            display: true,
-                            // text: "Total recipe base on popularity"
-                        }
-                    }
-                });
-
-            },
-
-            error => {
-                console.log(error)
-            }
-        );
-    </script>
-    <script>
         $(document).ready(function() {
-            $('#example').DataTable();
+            $('#examples').DataTable();
         });
     </script>
-
-
     <!-- Bootstrap tether Core JavaScript -->
     <script src="./assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./dist/js/app-style-switcher.js"></script>

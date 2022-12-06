@@ -257,6 +257,7 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Sub Content
                         </button>
+                        <a href="lesson.php?modules_Id=<?= $_GET['modules_Id'] ?>" class="btn btn-outline-success">Back</a>
 
                     </div>
                 </div>
@@ -277,7 +278,7 @@ if (!isset($_SESSION['admin_id'])) {
                     </div>
                     <div class="row card p-4">
 
-                        <table id="example" class="display " style="width:100%">
+                        <table id="example" class="display " style="width:100%; table-layout:fixed">
                             <thead>
                                 <tr>
                                     <th>Content ID</th>
@@ -310,8 +311,8 @@ if (!isset($_SESSION['admin_id'])) {
                                 ?> <tr>
 
                                             <td><?= $row['sublesson_Id'] ?></td>
-                                            <td><?= $row['header'] ?></td>
-                                            <td><?= $row['paragraph'] ?></td>
+                                            <td class="col-2 text-truncate"><?= $row['header'] ?></td>
+                                            <td class="col-2 text-truncate"><?= $row['paragraph'] ?></td>
                                             <td><?= $row['video'] ?></td>
                                             <td><?= $row['images'] ?></td>
 
@@ -319,10 +320,10 @@ if (!isset($_SESSION['admin_id'])) {
 
 
                                             <td>
-                                                <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                    <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                    <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deletesublesson.php?sublesson_Id=<?= $row['sublesson_Id'] ?>&lesson_Id=<?= $row['lesson_Id'] ?>&image=<?= $row['images'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-                                                    <a href="codesnippets.php?sublesson_Id=<?= $row['sublesson_Id'] ?>" class="mx-2   btn btn-success text-white">Snippets</a>
+                                                <div class="d-flex justify-content-center align-items-md-streatch flex-column  ">
+                                                    <a href="editSublesson.php?sublesson_Id=<?= $row['sublesson_Id'] ?>" class="mx-2 btn btn-info ">Edit</a>
+                                                    <a onclick="confirm('are you sure you want to delete this sublesson?')" href="./process/deletesublesson.php?sublesson_Id=<?= $row['sublesson_Id'] ?>&lesson_Id=<?= $row['lesson_Id'] ?>" class="mx-2 my-2   btn btn-danger text-white">Delete</a>
+                                                    <a href="codesnippets.php?sublesson_Id=<?= $row['sublesson_Id'] ?>&lesson_Id=<?= $row['lesson_Id'] ?>" class="mx-2   btn btn-success text-white">Snippets</a>
 
                                                 </div>
                                             </td>
@@ -406,14 +407,14 @@ if (!isset($_SESSION['admin_id'])) {
                     </div>
 
                 </div>
-                <div class="row ">
+                <!-- <div class="row ">
                     <div class="col-md-5 my-4">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Lesson Content
                         </button>
 
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class="container ">
                     <div class="row">
                         <div class="col-md-12">

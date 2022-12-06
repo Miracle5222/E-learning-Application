@@ -392,7 +392,7 @@ if (!isset($_SESSION['admin_id'])) {
 
                                             <td>
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                    <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
+                                                    <a href="editModules.php?modules_Id=<?= $row['modules_Id'] ?>" class="mx-2 btn btn-info">Edit</a>
                                                     <a onclick="confirm('are you sure you want to delete this module?')" href="./modules.php?modules_Id=<?= $row['modules_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
                                                     <a href="lesson.php?modules_Id=<?= $row['modules_Id'] ?>" class="mx-2 btn btn-primary">View Lessons</a>
                                                 </div>

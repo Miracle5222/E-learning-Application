@@ -273,7 +273,7 @@ if (!isset($_SESSION['admin_id'])) {
                                         </div>
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Time Duration</label>
-                                            <input type="time" value="<?= $row['time'] ?>" class="form-control without_ampm" required name="time">
+                                            <input type="text" value="<?= $row['time'] ?>" class="form-control without_ampm" required name="time">
                                         </div>
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Difficulty</label>
