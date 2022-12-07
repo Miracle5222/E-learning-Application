@@ -250,7 +250,7 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Questions
                         </button>
-                        <a href="addQuiz.php" class="btn btn-success  text-white">Back</a>
+                        <!-- <a href="addQuiz.php" class="btn btn-success  text-white">Back</a> -->
 
                     </div>
                 </div>

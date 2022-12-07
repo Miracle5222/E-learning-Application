@@ -289,7 +289,7 @@ if (!isset($_SESSION['admin_id'])) {
                 <div class="container ">
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="card p-4">
                                 <div class="card-header my-4">
                                     <h3>Language</h3>
@@ -384,8 +384,8 @@ if (!isset($_SESSION['admin_id'])) {
 
                                                     <td class="text-center">
                                                         <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                            <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                            <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+                                                            <!-- <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a> -->
+                                                            <!-- <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a> -->
 
                                                             <a href="allstudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-primary">View</a>
                                                         </div>
@@ -411,90 +411,23 @@ if (!isset($_SESSION['admin_id'])) {
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card p-4">
-                                <div class="card-header my-4">
-                                    <h3>Quiz Results</h3>
-                                </div>
-                                <table id="examples" class="display " style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Student ID</th>
-                                            <th>Score</th>
-                                            <th>Remarks</th>
-                                            <th>Edit</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-
-                                        $sql = "SELECT * from tblresult";
-                                        $result = $conn->query($sql);
-
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while ($row = $result->fetch_assoc()) {
-
-                                        ?>
-                                                <tr>
-
-                                                    <td><?= $row['student_Id'] ?></td>
-
-                                                    <td><?= $row['score'] ?></td>
-
-
-
-                                                    <?php
-                                                    if ($row['remarks'] == "Failed") {     ?>
-                                                        <td class="text-danger"><?= $row['remarks'] ?></td>
-
-                                                    <?php    } else { ?>
-                                                        <td class="text-success "><?= $row['remarks'] ?></td>
-                                                    <?php  } ?>
-
-                                                    <td class="text-center">
-                                                        <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                            <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                            <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
-
-                                                            <a href="modules.php?programming_Id=<?= $row['programming_Id'] ?>" class="mx-2 btn btn-primary">View</a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                        <?php
-
-                                            }
-                                        } else {
-                                        }
-                                        $conn->close(); ?>
-
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Student ID</th>
-                                            <th>Score</th>
-                                            <th>Remarks</th>
-                                            <th>Edit</th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-
+                        <div class="col-md-6"></div>
                     </div>
 
                 </div>
-                <div class="row"></div>
-
-                <div class="row"></div>
 
             </div>
+            <div class="row"></div>
 
-            <footer class="footer text-center">
-                Basic E-learning Programming Application<strong>copy right &copy 2022</strong>
-            </footer>
+            <div class="row"></div>
 
         </div>
+
+        <footer class="footer text-center">
+            Basic E-learning Programming Application<strong>copy right &copy 2022</strong>
+        </footer>
+
+    </div>
 
     </div>
     <script>

@@ -9,6 +9,18 @@ if (!isset($_SESSION['admin_id'])) {
     header("Location: index.php");
 }
 ?>
+<?php
+$selectStudent = "select * from tblstudentlang where student_Id = '$_GET[student_Id]'";
+$res = $conn->query($selectStudent);
+$_SESSION['studentId'] = $_GET['student_Id'];
+if ($res->num_rows > 0) {
+    while ($rowRe = $res->fetch_assoc())
+        $_SESSION['StudentClass'] = $rowRe['class_Id'];
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
@@ -178,66 +190,7 @@ if (!isset($_SESSION['admin_id'])) {
 
             <div class="container-fluid">
 
-                <div class="row">
-                    <?php
-                    $modules = " select count(modules_Id) as totalModules from tblmodules";
-                    $resultModules = $conn->query($modules);
-                    $rowModules = $resultModules->fetch_assoc();
-                    if ($resultModules) {
-                        $_SESSION['totalModules'] = $rowModules['totalModules'];
-                    } else {
-                        $_SESSION['totalModules'] =  0;
-                    }
-                    $modules = " select count(lesson_Id) as totalLessons from tbllessons";
-                    $resultModules = $conn->query($modules);
-                    $rowModules = $resultModules->fetch_assoc();
-                    if ($resultModules) {
-                        $_SESSION['totalLessons'] = $rowModules['totalLessons'];
-                    } else {
-                        $_SESSION['totalLessons'] =  0;
-                    }
 
-                    $lang = " select count(programming_Id) as totalLanguage from programminglang";
-
-                    $resultlang = $conn->query($lang);
-                    $rowLang = $resultlang->fetch_assoc();
-                    if ($resultlang) {
-                        $_SESSION['totalLanguage'] = $rowLang['totalLanguage'];
-                    } else {
-                        $_SESSION['totalLanguage'] =  0;
-                    }
-
-                    ?>
-                    <div class="col-md-4">
-                        <div class="card ">
-                            <h3 class="text-center py-4">Total Modules</h2>
-                                <div style="height: 100px; width:100%; background-color:darkslategrey; border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
-                                    <h2 class="text-white"><?= $_SESSION['totalModules'] ?></h2>
-                                </div>
-                                <!-- <canvas id="myChart" style="width:100%;max-width:600px"></canvas> -->
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card ">
-                            <h3 class="text-center py-4">Total Lessons</h2>
-                                <div style="height: 100px; width:100%; background-color:darkcyan;  border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
-                                    <h2 class="text-white"><?= $_SESSION['totalLessons'] ?></h2>
-                                </div>
-                                <!-- <canvas id="myCharts" style="width:100%;max-width:600px"></canvas> -->
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card ">
-                            <h3 class="text-center py-4">Total Language</h2>
-                                <div style="height: 100px; width:100%; background-color:darkcyan;  border-top-left-radius: 15px;border-top-right-radius: 15px;" class="d-flex justify-content-center align-items-center">
-                                    <h2 class="text-white"><?= $_SESSION['totalLanguage'] ?></h2>
-                                </div>
-                                <!-- <canvas id="myCharts" style="width:100%;max-width:600px"></canvas> -->
-                        </div>
-                    </div>
-
-
-                </div>
 
                 <div class="row ">
                     <div class="col-md-5">
@@ -287,7 +240,22 @@ if (!isset($_SESSION['admin_id'])) {
                     </div>
                 </div>
                 <div class="container ">
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card p-4">
+                                <div class="card-header">
+                                    <h4 class="text-center text-success">Quizzes Score</h4>
+                                </div> <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-4">
+                                <div class="card-header">
+                                    <h4 class="text-center text-success">Module Status</h4>
+                                </div> <canvas id="myChart1" style="width:100%;max-width:700px"></canvas>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
 
                         <div class="col-md-12">
@@ -330,7 +298,7 @@ if (!isset($_SESSION['admin_id'])) {
                                                             <a href="editStudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-info">Edit</a>
                                                             <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
-                                                            <a href="allstudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-primary">View</a>
+                                                            <!-- <a href="allstudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-primary">View</a> -->
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -372,10 +340,143 @@ if (!isset($_SESSION['admin_id'])) {
 
     </div>
     <script>
+        function AjaxCallWithPromise() {
+            return new Promise(function(resolve, reject) {
+                const objXMLHttpRequest = new XMLHttpRequest();
+
+                objXMLHttpRequest.onreadystatechange = function() {
+                    if (objXMLHttpRequest.readyState === 4) {
+                        if (objXMLHttpRequest.status == 200) {
+                            resolve(objXMLHttpRequest.responseText);
+                        } else {
+                            reject('Error Code: ' + objXMLHttpRequest.status + ' Error Message: ' + objXMLHttpRequest.statusText);
+                        }
+                    }
+                }
+
+                objXMLHttpRequest.open('GET', './process/finished.php');
+                objXMLHttpRequest.send();
+            });
+        }
+
+        AjaxCallWithPromise().then(
+            data => {
+                // console.log('Success Response: ' + data);
+                // console.log(JSON.parse(data[0].modules_Id))
+
+                let parses = JSON.parse(data);
+                // console.log(parses);
+                var xValues = ["Module Finished", "Lesson Finished"];
+                var yValues = parses;
+                var barColors = ["lightblue", "lightgreen"];
+
+                new Chart("myChart1", {
+                    type: "bar",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            backgroundColor: barColors,
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+
+                    }
+                });
+
+
+            },
+
+            error => {
+                console.log(error)
+            }
+        );
+    </script>
+    <script>
+        function AjaxCallWithPromise() {
+            return new Promise(function(resolve, reject) {
+                const objXMLHttpRequest = new XMLHttpRequest();
+
+                objXMLHttpRequest.onreadystatechange = function() {
+                    if (objXMLHttpRequest.readyState === 4) {
+                        if (objXMLHttpRequest.status == 200) {
+                            resolve(objXMLHttpRequest.responseText);
+                        } else {
+                            reject('Error Code: ' + objXMLHttpRequest.status + ' Error Message: ' + objXMLHttpRequest.statusText);
+                        }
+                    }
+                }
+
+                objXMLHttpRequest.open('GET', './process/quizResults.php');
+                objXMLHttpRequest.send();
+            });
+        }
+
+        AjaxCallWithPromise().then(
+            data => {
+                // console.log('Success Response: ' + data);
+                // console.log(JSON.parse(data[0].modules_Id))
+
+                let parses = JSON.parse(data);
+                // console.log(parses);
+
+                // let quizRes = parses[0].modules.map((val) => {
+                //     return val.modules_Id;
+                // })
+                let quizResModuleScore = parses[1].quizResults.map((val) => {
+                    return val.modules_Id;
+                })
+                let quizResScore = parses[1].quizResults.map((val) => {
+                    return val.score;
+                })
+                // let yValuess = parses.map((value) => {
+                //     return value;
+                // })
+                // let xValuess = parses.map((value) => {
+                //     return value.title;
+                // })
+
+
+                new Chart("myChart", {
+                    type: "line",
+                    data: {
+                        labels: quizResModuleScore,
+                        datasets: [{
+                            fill: false,
+                            lineTension: 0,
+                            backgroundColor: "rgba(0,0,255,1.0)",
+                            borderColor: "rgba(0,0,255,0.1)",
+                            data: quizResScore
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+
+                    }
+                });
+
+            },
+
+            error => {
+                console.log(error)
+            }
+        );
+    </script>
+
+    <script>
+
+    </script>
+    <script>
         $(document).ready(function() {
             $('#examples').DataTable();
         });
     </script>
+
     <!-- Bootstrap tether Core JavaScript -->
     <script src="./assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./dist/js/app-style-switcher.js"></script>
