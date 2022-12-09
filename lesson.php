@@ -218,7 +218,7 @@ if (!isset($_SESSION['admin_id'])) {
 
                             if ($result) {
 
-                                $selectModules = "select * from tbllessons where lessons = '$lessonNo'";
+                                $selectModules = "select * from tbllessons where lessons = '$lessonNo' ORDER BY lessons";
                                 $resselectModules = $conn->query($selectModules);
 
                                 $addAllStudent = "SELECT tblstudentlang.`class_Id`, tblstudentlang.`programming_Id` ,tblmodules.`modules_Id`, tbllessons.`lesson_Id` FROM tblstudentlang 
@@ -367,7 +367,7 @@ if (!isset($_SESSION['admin_id'])) {
                                 if (isset($_GET['modules_Id'])) {
                                     $sql = "SELECT * from tbllessons where modules_Id = '$_GET[modules_Id]' order by lessons";
                                 } else {
-                                    $sql = "SELECT * from tbllessons  order by lessons";
+                                    $sql = "SELECT * from tbllessons ORDER BY lessons asc";
                                 }
                                 $result = $conn->query($sql);
 

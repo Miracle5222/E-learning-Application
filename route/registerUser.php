@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
                         $insertModules = "insert into tblmyclass(class_Id,modules_Id,module_status)values('$rowClassId[class_Id]','$rowModules[modules_Id]','$rowModules[status]')";
 
                         if ($conn->query($insertModules) === TRUE) {
-                            $allLessons = " SELECT * FROM tbllessons WHERE modules_Id = '$rowModules[modules_Id]'";
+                            $allLessons = " SELECT * FROM tbllessons WHERE modules_Id = '$rowModules[modules_Id]' ORDER BY lessons";
                             $lessonResult = $conn->query($allLessons);
                             if ($lessonResult->num_rows > 0) {
                                 while ($rowlesson =   $lessonResult->fetch_assoc()) {
