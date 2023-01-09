@@ -213,7 +213,7 @@ if (!isset($_SESSION['admin_id'])) {
                     <?php
                     if (isset($_POST['subLesson'])) {
                         $sub_id = $_POST['sub_id'];
-                        $video_id = $_POST['video_id'];
+
 
                         $paragraph = $_POST['paragraph'];
                         $lesson_id = $_POST['lesson_id'];
@@ -226,10 +226,15 @@ if (!isset($_SESSION['admin_id'])) {
 
                             $file_name = $_FILES['image']['name'];
 
-
                             $file_tmp = $_FILES['image']['tmp_name'];
+
+                            $video_name = $_FILES['video_id']['name'];
+                            $video_tmp = $_FILES['video_id']['tmp_name'];
+                            // $filePath =  "./uploads/images/$file_name";
+
                             move_uploaded_file($file_tmp, "./uploads/images/" . $file_name);
-                            $addquerry = "update tblsublessons set sublesson_Id ='$sub_id' ,header = '$heading' ,paragraph ='$paragraph',video = '$video_id', images = '$file_name' ,lesson_Id = '$lesson_id' where sublesson_Id = '$_GET[sublesson_Id]'";
+                            move_uploaded_file($video_tmp, "./uploads/videos/" . $video_name);
+                            $addquerry = "update tblsublessons set sublesson_Id ='$sub_id' ,header = '$heading' ,paragraph ='$paragraph',video = '$video_name', images = '$file_name' ,lesson_Id = '$lesson_id' where sublesson_Id = '$_GET[sublesson_Id]'";
                             $iquery = mysqli_query($conn, $addquerry);
 
                             if ($iquery) { ?>
@@ -280,9 +285,14 @@ if (!isset($_SESSION['admin_id'])) {
                                                     <label for="video_id">Content ID</label>
                                                     <input type="number" class="form-control" id="sub_id" name="sub_id" value=<?= $row['sublesson_Id'] ?> placeholder="Video_id...">
                                                 </div>
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label for="video_id">Video ID</label>
                                                     <input type="text" class="form-control" id="video_id" name="video_id" value="<?= $row['video'] ?>" placeholder="Video_id...">
+                                                </div> -->
+                                                <div class="form-group">
+
+                                                    <label for="date" class="form-label">Video</label>
+                                                    <input type="file" name="video_id" accept="video/*" class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="image">Image</label>

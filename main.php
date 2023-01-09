@@ -291,6 +291,27 @@ if (!isset($_SESSION['admin_id'])) {
                     <div class="row">
                         <div class="col-md-8">
                             <div class="card p-4">
+                                <?php
+                                if (isset($_GET['programming_Id'])) {
+
+                                    $success = "";
+                                    $error = "";
+
+                                    $sql = "delete from programminglang where programming_Id = '$_GET[programming_Id]'";
+                                    if ($conn->query($sql) === TRUE) {
+
+                                        $successDelete = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
+                                    } else {
+                                        $errorDelete = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+                                    }
+                                }
+                                ?>
                                 <div class="card-header my-4">
                                     <h3>Language</h3>
                                 </div>
@@ -324,8 +345,8 @@ if (!isset($_SESSION['admin_id'])) {
 
                                                     <td class="text-center">
                                                         <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                            <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a>
-                                                            <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
+
+                                                            <a onclick="confirm('are you sure you want to delete this programming language?')" href="./main.php?programming_Id=<?= $row['programming_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
                                                             <a href="modules.php?programming_Id=<?= $row['programming_Id'] ?>" class="mx-2 btn btn-primary">View</a>
                                                         </div>
@@ -350,6 +371,27 @@ if (!isset($_SESSION['admin_id'])) {
                                 </table>
                             </div>
                             <div class="card p-4">
+                                <?php
+                                if (isset($_GET['student_Id'])) {
+
+                                    $success = "";
+                                    $error = "";
+
+                                    $sql = "delete from tblstudent where student_Id = '$_GET[student_Id]'";
+                                    if ($conn->query($sql) === TRUE) {
+
+                                        $successDelete = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
+                                    } else {
+                                        $errorDelete = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+                                    }
+                                }
+                                ?>
                                 <div class="card-header my-4">
                                     <h3>All Student</h3>
                                 </div>
@@ -385,7 +427,7 @@ if (!isset($_SESSION['admin_id'])) {
                                                     <td class="text-center">
                                                         <div class="d-flex justify-content-start align-items-center flex-row ">
                                                             <!-- <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a> -->
-                                                            <!-- <a onclick="confirm('are you sure you want to delete this recipe?')" href="./process/deleteRecipe.php?recipe_id=<?= $row['recipe_id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a> -->
+                                                            <a onclick="confirm('are you sure you want to delete this student?')" href="./main.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
                                                             <a href="allstudent.php?student_Id=<?= $row['student_Id'] ?>" class="mx-2 btn btn-primary">View</a>
                                                         </div>

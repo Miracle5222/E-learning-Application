@@ -181,7 +181,7 @@ if (!isset($_SESSION['admin_id'])) {
 
                 if (isset($_POST['submit'])) {
 
-                    $video = $_POST['video'];
+                    // $video = $_POST['video'];
 
                     $heading = $_POST['heading'];
                     $lessonId = $_POST['lessonId'];
@@ -197,22 +197,24 @@ if (!isset($_SESSION['admin_id'])) {
                     // echo "<br>";
                     // echo "<br>";
                     // echo  $paragraph;
+                    // $video = $_FILES['video'];
+                    // print_r($video);
 
 
 
-
-
-                    if (isset($_FILES['image']['name'])) {
+                    if (isset($_FILES['image']['name']) && isset($_FILES['video']['name'])) {
 
                         $file_name = $_FILES['image']['name'];
 
-
                         $file_tmp = $_FILES['image']['tmp_name'];
+
+                        $video_name = $_FILES['video']['name'];
+                        $video_tmp = $_FILES['video']['tmp_name'];
                         // $filePath =  "./uploads/images/$file_name";
 
                         move_uploaded_file($file_tmp, "./uploads/images/" . $file_name);
-
-                        $addquerry = "insert into tblsublessons values (0,'$heading','$paragraph','$video','$file_name','$lessonId')";
+                        move_uploaded_file($video_tmp, "./uploads/videos/" . $video_name);
+                        $addquerry = "insert into tblsublessons values (0,'$heading','$paragraph','$video_name','$file_name','$lessonId')";
                         $iquery = mysqli_query($conn, $addquerry);
 
                         if ($iquery) { ?>
@@ -357,14 +359,15 @@ if (!isset($_SESSION['admin_id'])) {
                                     </div>
                                     <div class="modal-body">
                                         <form class="form-horizontal form-material" method="POST" enctype="multipart/form-data">
-                                            <!-- <div class="mb-3">
-                                    <label for="recipe" class="form-label">Module ID</label>
-                                    <input type="text" class="form-control" required name="modules_Id" placeholder="Chicken curry..">
-                                </div> -->
 
-                                            <div class="mb-3">
+
+                                            <!-- <div class="mb-3">
                                                 <label for="date" class="form-label">Video ID</label>
                                                 <input type="text" class="form-control" name="video" placeholder="vOEN65nm4YU">
+                                            </div> -->
+                                            <div class="mb-3">
+                                                <label for="date" class="form-label">Video</label>
+                                                <input type="file" name="video" accept="video/*" class="form-control">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="date" class="form-label">Image</label>
