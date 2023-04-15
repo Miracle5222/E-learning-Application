@@ -215,9 +215,9 @@ if (!isset($_SESSION['admin_id'])) {
                         $sub_id = $_POST['sub_id'];
 
 
-                        $paragraph = $_POST['paragraph'];
+                        $paragraph = addslashes($_POST['paragraph']);
                         $lesson_id = $_POST['lesson_id'];
-                        $heading = $_POST['heading'];
+                        $heading = addslashes($_POST['heading']);
 
 
 

@@ -1,5 +1,8 @@
-
 <?php include "../connections/config.php" ?>
+
+
+
+
 <?php
 
 $json = file_get_contents('php://input');
@@ -14,6 +17,7 @@ $lang2 = array();
 
 $email = $obj['email'];
 $password = $obj['password'];
+
 
 
 $sql = "SELECT * FROM tblstudent where password = '$password' and email ='$email ' ";

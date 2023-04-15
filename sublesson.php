@@ -183,10 +183,9 @@ if (!isset($_SESSION['admin_id'])) {
 
                     // $video = $_POST['video'];
 
-                    $heading = $_POST['heading'];
+                    $heading = addslashes($_POST['heading']);
                     $lessonId = $_POST['lessonId'];
-                    $paragraph = $_POST['paragraph'];
-
+                    $paragraph = addslashes($_POST['paragraph']);
                     // echo  $video;
                     // echo "<br>";
                     // echo "<br>";

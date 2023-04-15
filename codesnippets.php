@@ -217,7 +217,7 @@ if (!isset($_SESSION['admin_id'])) {
 
                             if (isset($_POST['submit'])) {
 
-                                $Snippets = $_POST['Snippets'];
+                                $Snippets = addslashes($_POST['Snippets']);
                                 $sublesson_Id = $_POST['sublesson_Id'];
                                 $language = $_POST['language'];
                                 $sql = "insert into tblsnippets (languageName,snippets,sublesson_Id)values('$language','$Snippets','$sublesson_Id')";
