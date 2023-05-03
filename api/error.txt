@@ -1,4 +1,0 @@
-Main.java:1: error: class main is public, should be declared in a file named main.java
-public class main {
-       ^
-1 error
