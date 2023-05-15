@@ -229,7 +229,8 @@ if (!isset($_SESSION['admin_id'])) {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Sub Content
                         </button>
-                        <a href="lesson.php?modules_Id=<?= $_GET['modules_Id'] ?>" class="btn btn-success">Back</a>
+                        <a hhref="lesson.php?modules_Id=<?= $_GET['modules_Id'] ?>" class="link">Back</a>
+                        <!-- <a href="lesson.php?modules_Id=<?= $_GET['modules_Id'] ?>" class="btn btn-success">Back</a> -->
 
                     </div>
                 </div>
