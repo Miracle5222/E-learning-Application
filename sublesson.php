@@ -181,23 +181,11 @@ if (!isset($_SESSION['admin_id'])) {
 
                 if (isset($_POST['submit'])) {
 
-                    // $video = $_POST['video'];
+
 
                     $heading = addslashes($_POST['heading']);
                     $lessonId = $_POST['lessonId'];
                     $paragraph = addslashes($_POST['paragraph']);
-                    // echo  $video;
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo  $heading;
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo  $lessonId;
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo  $paragraph;
-                    // $video = $_FILES['video'];
-                    // print_r($video);
 
 
 
@@ -234,31 +222,14 @@ if (!isset($_SESSION['admin_id'])) {
                     }
                 }
                 ?>
-                <!-- 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Popularity</h2>
-                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card p-4">
-                            <h3 class="text-center">Average Ratings</h2>
-                                <canvas id="myCharts" style="width:100%;max-width:600px"></canvas>
-                        </div>
-                    </div>
 
-
-
-                </div> -->
 
                 <div class="row ">
                     <div class="col-md-5 my-4">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Sub Content
                         </button>
-                        <a href="lesson.php?modules_Id=<?= $_GET['modules_Id'] ?>" class="btn btn-outline-success">Back</a>
+                        <a href="lesson.php?modules_Id=<?= $_GET['modules_Id'] ?>" class="btn btn-success">Back</a>
 
                     </div>
                 </div>
