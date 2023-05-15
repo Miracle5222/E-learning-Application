@@ -249,7 +249,7 @@ if (!isset($_SESSION['admin_id'])) {
 
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-start align-items-center flex-row ">
-                                                    <!-- <a href="editRecipes.php?id=<?= $row['recipe_id'] ?>&image=<?= $row['image'] ?>" class="mx-2 btn btn-info">Edit</a> -->
+
                                                     <a onclick="confirm('are you sure you want to delete this Quiz?')" href="./addQuiz.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2   btn btn-danger text-white">Delete</a>
 
                                                     <a href="questions.php?quiz_Id=<?= $row['quiz_Id'] ?>" class="mx-2 btn btn-primary">View</a>
